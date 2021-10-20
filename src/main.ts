@@ -1,5 +1,5 @@
 import { ConfigService } from 'nestjs-config';
-import { MyLoggerService } from './utils/my-logger/my-logger.service'
+import { MyLoggerService } from './utils/my-logger/my-logger.service';
 import { AllExceptionFilter } from './common/filters/all-exception.filter';
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
@@ -13,7 +13,7 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
   const appConfig = configService.get('app');
   const PORT = appConfig.port;
-  console.log('jira issue test')
+  console.log('jira issue test');
   await app.listen(3000, () => {
     const loggerService = app.get(MyLoggerService);
     loggerService.log(`server listen on ${PORT}`, 'bootstrap');
