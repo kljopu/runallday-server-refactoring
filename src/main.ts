@@ -13,7 +13,6 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
   const appConfig = configService.get('app');
   const PORT = appConfig.port;
-  console.log('jira issue test');
   await app.listen(3000, () => {
     const loggerService = app.get(MyLoggerService);
     loggerService.log(`server listen on ${PORT}`, 'bootstrap');
