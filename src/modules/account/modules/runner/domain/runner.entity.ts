@@ -2,7 +2,7 @@ import { Column, Entity, Generated, PrimaryColumn } from 'typeorm';
 import { User } from '../../../domain/user.abstract.class';
 import * as bcrypt from 'bcrypt';
 import { ConflictError } from '../../../../../utils/errors';
-import { FullName } from '../../../domain/fullName.vo';
+import { FullName } from '../../../domain/full-name.vo';
 import { UserGenderEnum } from '../../../domain/account.constants';
 
 @Entity({ name: 't_runner' })

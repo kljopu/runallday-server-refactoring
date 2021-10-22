@@ -1,5 +1,5 @@
 import { UserGenderEnum, UserStateEnum } from './account.constants';
-import { FullName } from './fullName.vo';
+import { FullName } from './full-name.vo';
 
 export abstract class User {
   public id: number;

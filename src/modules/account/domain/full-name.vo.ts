@@ -13,10 +13,10 @@ export class FullName {
     this.lastName = lastName;
   }
 
-  @Column({ name: 'firstName' })
+  @Column({ name: 'first_name' })
   private firstName: string;
 
-  @Column({ name: 'lastName' })
+  @Column({ name: 'last_name' })
   private lastName: string;
 
   public getName() {
