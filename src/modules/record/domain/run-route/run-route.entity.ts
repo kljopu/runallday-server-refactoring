@@ -8,7 +8,7 @@ import {
   PrimaryColumn,
   RelationId,
 } from 'typeorm';
-import { Record } from '../../domain/record.entity';
+import { Record } from '../record/record.entity';
 
 @Entity({ name: 't_run_route' })
 export class RunRoute {
@@ -20,7 +20,6 @@ export class RunRoute {
     onUpdate: 'CASCADE',
     onDelete: 'CASCADE',
   })
-  @JoinColumn({ name: 'record_uid', referencedColumnName: 'uid' })
   public record: Record;
 
   @RelationId((rr: RunRoute) => rr.record)
