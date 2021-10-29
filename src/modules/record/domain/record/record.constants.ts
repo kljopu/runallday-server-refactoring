@@ -3,3 +3,7 @@ export enum RunningState {
   STOP = 'STOP',
   FINISH = 'FINISH',
 }
+export enum RecordTypeEnum {
+  FREE = 'FREE',
+  DISTANCE = 'DISTANCE',
+}

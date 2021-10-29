@@ -1,9 +1,19 @@
-import { Column, Entity, Generated, PrimaryColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  Generated,
+  JoinColumn,
+  OneToMany,
+  OneToOne,
+  PrimaryColumn,
+  RelationId,
+} from 'typeorm';
 import { User } from '../../../domain/user.abstract.class';
 import * as bcrypt from 'bcrypt';
 import { ConflictError } from '../../../../../utils/errors';
 import { FullName } from '../../../domain/full-name.vo';
 import { UserGenderEnum } from '../../../domain/account.constants';
+import { Record } from '../../../../record/domain/record/record.entity';
 
 @Entity({ name: 't_runner' })
 export class Runner extends User {
@@ -18,6 +28,25 @@ export class Runner extends User {
     nullable: true,
   })
   public providerUid: string;
+
+  @OneToMany(
+    type => Record,
+    records => records.runner,
+  )
+  public records: Record[];
+
+  @OneToOne(type => Record, {
+    nullable: true,
+    eager: true,
+    onDelete: 'SET NULL',
+    onUpdate: 'CASCADE',
+  })
+  @JoinColumn({ name: 'recent_record_uid', referencedColumnName: 'uid' })
+  public recentRecord: Record;
+
+  @Column({ name: 'recent_record_uid', nullable: true })
+  @RelationId((runner: Runner) => runner.recentRecord)
+  public recentRecordtUid: string;
 
   @Column({
     name: 'di',
