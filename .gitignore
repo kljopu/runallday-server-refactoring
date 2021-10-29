@@ -38,3 +38,6 @@ lerna-debug.log*
 
 # firebase config
 /src/config/oboon-manager-firebase-adminsdk-wjyoy-b835cee9ef.json
+
+CPClient_64bit
+CPClient_mac

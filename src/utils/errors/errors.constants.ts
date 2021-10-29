@@ -10,5 +10,6 @@ export enum ErrorCode {
   'auth/invalid-password' = 'auth/invalid-password',
   'auth/already-registered' = 'auth/already-registered',
   'auth/token-expired' = 'auth/token-expired',
-  'auth/invalid-token' = 'auth/invalid-token'
+  'auth/invalid-token' = 'auth/invalid-token',
+  'record/unfinished' = 'record/unfinished',
 }

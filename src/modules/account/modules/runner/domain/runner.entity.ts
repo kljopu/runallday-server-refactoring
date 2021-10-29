@@ -114,7 +114,6 @@ export class Runner extends User {
     return bcrypt.hashSync(password, salt);
   }
 
-  // 비밀번호 변경
   public changePassword(
     originPassword: string,
     newPassword: string,
@@ -140,5 +139,17 @@ export class Runner extends User {
     }
 
     this.setToHashedPassword(newPassword);
+  }
+
+  public isRecentRecordFinished(): boolean {
+    return this.recentRecord.isRunFinished();
+  }
+
+  public getFullname(): string {
+    return this.fullname.getName();
+  }
+
+  public async register(): Promise<Runner> {
+    return this;
   }
 }

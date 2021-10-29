@@ -15,6 +15,7 @@ import { IRunningDateInfo } from './record.interface';
 import { RecordTypeEnum, RunningState } from './record.constants';
 import { Runner } from '../../../account/modules/runner/domain/runner.entity';
 import { RunRoute } from '../run-route/run-route.entity';
+import { ConflictError } from '../../../../utils/errors';
 
 @Entity({ name: 't_record' })
 export class Record {
@@ -79,7 +80,7 @@ export class Record {
     name: 'running_time',
     nullable: true,
     default: 0,
-    comment: '러닝 시간(밀리초단위)',
+    comment: '러닝 시간(초단위)',
   })
   public runningTime: number;
 
@@ -99,7 +100,28 @@ export class Record {
   })
   public state: RunningState;
 
-  public recordType: RecordTypeEnum; // TODO DB data type t_recordTypeEnum 생성
+  // TODO DB data type t_recordTypeEnum 생성
+  @Column({
+    name: 'record_type',
+    type: 'enum',
+    enum: RecordTypeEnum,
+    nullable: false,
+  })
+  public recordType: RecordTypeEnum;
+
+  @Column({
+    name: 'goal',
+    default: 0,
+    nullable: true,
+    comment: 'recordType에 따라 시간일 수도 거리일 수도 있다.',
+  })
+  public goal: number;
+
+  @Column('int', {
+    array: true,
+    default: [],
+  })
+  public speedPerKm: number[] | (() => number);
 
   @OneToOne(type => RunRoute, {
     nullable: true,
@@ -112,10 +134,6 @@ export class Record {
   @RelationId((record: Record) => record.runRoute)
   @Column({ name: 'run_route_id' })
   public runRouteId: number;
-
-  // TODO RecordTypeEnum이 FREE가 아닐 경우 해당 컬럼 사용. 이에 따라 객체 내부에 goal을 세팅해주는 메서드 필요
-  // recordType에 따라 시간일 수도 거리일 수도 있다.
-  public goal: number;
 
   /**
    * @static
@@ -175,5 +193,40 @@ export class Record {
       this.recordType = recordType;
       this.goal = goal;
     }
+  }
+
+  public isRunFinished(): boolean {
+    if (this.state === RunningState.FINISH) {
+      return true;
+    }
+    return false;
+  }
+
+  // 스피드 계산 함수 추가
+  public calculateSpeed(): void {
+    // 아무래도 기록 쪽 관리를 front localstorage에서 하는 방법이 더욱 안정성이 있는 것 같다.
+    // 이를 특정 기준(초, 거리)마다 서버와 통신을 통해 저장
+  }
+
+  public setSpeedPerKm(speedPerKm: number[]): void {
+    // 기본적으로 들어온 Array를 교채하는 방식으로 한다.
+    // 이경우 들어오는 오류로 인해 빈값이 올 경우를 확인하는 로직이 필요하다.
+    if (speedPerKm.length === 0) {
+      throw new ConflictError(
+        '잘못된 값을 입력하였습니다.',
+        '적어도 하나 이상의 속도값이 필요합니다.',
+      );
+    } else {
+      // speed array 값이 들어 옴
+      // Array의 모든 값이 0인 경우 throw -> DTO에서 검사
+      // length가 더 짧아진 경우 throw
+      if (this.speedPerKm.length > speedPerKm.length) {
+        throw new ConflictError(
+          '잘못된 값을 입력하였습니다.',
+          '기존 속도 기록보다 더 짧아진 기록을 입력할 수 없습니다.',
+        );
+      }
+    }
+    this.speedPerKm = speedPerKm;
   }
 }
