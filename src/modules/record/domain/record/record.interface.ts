@@ -8,6 +8,7 @@ export interface IRunningDateInfo {
 
 export interface IRecordInfo {
   runnerId: number; // 사용자 ID
+  runnerName: string; // 사용자 이름
   startedAt: Date; // 기록 시작 시간. 포맷 => YYYY.MM.DD HH:mm:ss
   endedAt: Date; // 기록 종료 시간. 포맷 => YYYY.MM.DD HH:mm:ss
   startCoordinates: Point; // 기록 시작 위치
