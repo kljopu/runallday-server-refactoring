@@ -20,6 +20,35 @@ export class FirebaseAdminService {
   ) {}
 
   /**
+   * @param {admin.auth.CreateRequest} properties
+   * @returns {Promise<admin.auth.UserRecord>}
+   * @memberof FirebaseAdminService
+   * @description firebase 유저를 생성한다.
+   */
+  public async createUser(
+    properties: admin.auth.CreateRequest,
+  ): Promise<admin.auth.UserRecord> {
+    try {
+      const firebaseUser = await this.admin.auth().createUser(properties);
+      this.logger.debug(
+        'firebaseUser: %o',
+        FirebaseAdminService.name,
+        firebaseUser,
+      );
+      return firebaseUser;
+    } catch (error) {
+      throw new ConflictError(
+        '인증 시 오류가 발생했습니다.\n지속적인 오류 발생 시 고객센터로 문의 바랍니다.',
+        `${
+          properties.email
+        } 로 firebase 유저 생성 중 오류가 발생했습니다. ${JSON.stringify(
+          error,
+        )}`,
+      );
+    }
+  }
+
+  /**
    * @param {admin.messaging.Message} message
    * @returns {Promise<string>}
    * @memberof FirebaseAdminService

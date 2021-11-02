@@ -96,7 +96,7 @@ export class Record {
     name: 'state',
     type: 'enum',
     enum: RunningState,
-    nullable: false,
+    nullable: true,
   })
   public state: RunningState;
 
@@ -118,6 +118,7 @@ export class Record {
   public goal: number;
 
   @Column('int', {
+    name: 'speed_per_km',
     array: true,
     default: [],
   })
@@ -132,7 +133,7 @@ export class Record {
   runRoute: RunRoute;
 
   @RelationId((record: Record) => record.runRoute)
-  @Column({ name: 'run_route_id' })
+  @Column({ name: 'run_route_id', nullable: true })
   public runRouteId: number;
 
   /**
