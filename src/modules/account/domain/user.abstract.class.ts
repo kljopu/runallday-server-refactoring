@@ -26,10 +26,6 @@ export abstract class User {
 
   public abstract checkPassword(originPassword: string): boolean;
 
-  public abstract setToHashedPassword(originPassword: string): void;
-
-  public abstract hashPassword(password: string): string;
-
   // 비밀번호 변경
   public abstract changePassword(
     originPassword: string,

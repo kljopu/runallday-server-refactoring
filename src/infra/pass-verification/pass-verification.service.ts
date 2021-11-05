@@ -5,12 +5,12 @@ import { exec } from 'child_process';
 import * as path from 'path';
 import * as querystring from 'querystring';
 import { PassUser } from './pass-user.class';
-import { convertPhoneNumberToE164Format } from '../../utils/phone-util';
 import { PassVerificationErrorCode as ErrorCode } from './errors/error-code';
 import { PassVerificationError } from './errors/pass-verification.error';
 import { MyLoggerService } from '../../utils/my-logger/my-logger.service';
 import { AppError, BadRequestError } from '../../utils/errors';
 import { ConfigService } from 'nestjs-config';
+import { convertPhoneNumberToE164Format } from '../../utils';
 
 @Injectable()
 export class PassVerificationService {
