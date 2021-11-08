@@ -1,5 +1,5 @@
 import * as path from 'path';
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { ConfigModule, ConfigService } from 'nestjs-config';
 import { AppService } from './app.service';
@@ -7,6 +7,8 @@ import { MyLoggerModule } from './utils/my-logger/my-logger.module';
 import { DatabaseModule } from './infra/database/database.module';
 import { DomainModule } from './modules/domain.module';
 import { FirebaseAdminModule } from './infra/firebase-admin/firebase-admin.module';
+import { FirebaseModule } from './infra/firebase/firebase.module';
+import { AppLoggerMiddleware } from './common/interceptors/http-logging.interceptor';
 
 @Module({
   imports: [
@@ -27,6 +29,13 @@ import { FirebaseAdminModule } from './infra/firebase-admin/firebase-admin.modul
       },
       inject: [ConfigService],
     }),
+    FirebaseModule.forRootAsync({
+      useFactory: (config: ConfigService) => {
+        config.get('firebase').verify();
+        return config.get('firebase');
+      },
+      inject: [ConfigService],
+    }),
     MyLoggerModule,
     DatabaseModule,
     DomainModule,
@@ -34,4 +43,8 @@ import { FirebaseAdminModule } from './infra/firebase-admin/firebase-admin.modul
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer): void {
+    consumer.apply(AppLoggerMiddleware).forRoutes('*');
+  }
+}
