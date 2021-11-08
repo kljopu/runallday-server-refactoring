@@ -7,6 +7,7 @@ import { MyLoggerModule } from './utils/my-logger/my-logger.module';
 import { DatabaseModule } from './infra/database/database.module';
 import { DomainModule } from './modules/domain.module';
 import { FirebaseAdminModule } from './infra/firebase-admin/firebase-admin.module';
+import { FirebaseModule } from './infra/firebase/firebase.module';
 
 @Module({
   imports: [
@@ -24,6 +25,13 @@ import { FirebaseAdminModule } from './infra/firebase-admin/firebase-admin.modul
       useFactory: (config: ConfigService) => {
         config.get('firebase-admin').verify();
         return config.get('firebase-admin');
+      },
+      inject: [ConfigService],
+    }),
+    FirebaseModule.forRootAsync({
+      useFactory: (config: ConfigService) => {
+        config.get('firebase').verify();
+        return config.get('firebase');
       },
       inject: [ConfigService],
     }),

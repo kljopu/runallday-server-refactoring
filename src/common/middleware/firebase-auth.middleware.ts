@@ -43,7 +43,7 @@ export class FirebaseAuthMiddleware implements NestMiddleware {
       }
       const { uid } = decodedIdToken;
       const verifiedRunner = await this.accountService.findOne({
-        where: { uid },
+        where: { providerUid: uid },
       });
 
       req.runner = verifiedRunner;

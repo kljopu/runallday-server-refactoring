@@ -38,8 +38,9 @@ export class Runner extends User {
   @OneToMany(
     type => Record,
     records => records.runner,
+    { lazy: true },
   )
-  public records: Record[];
+  public records: Promise<Record[]>;
 
   @OneToOne(type => Record, {
     nullable: true,
