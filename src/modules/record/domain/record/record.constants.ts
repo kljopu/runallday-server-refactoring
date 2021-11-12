@@ -4,9 +4,9 @@ export enum RunningState {
   FINISH = 'FINISH',
 }
 export enum RecordTypeEnum {
-  FREE = 'FREE',
-  DISTANCE = 'DISTANCE',
-  TIME = 'TIME',
+  free = 'free',
+  distance = 'distance',
+  time = 'time',
 }
 
 // 사용할 지 고려중

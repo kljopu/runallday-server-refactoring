@@ -1,11 +1,11 @@
 import { ConfigService } from 'nestjs-config';
 import { MyLoggerService } from './utils/my-logger/my-logger.service';
 import { AllExceptionFilter } from './common/filters/all-exception.filter';
-import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
+import { ValidationPipe } from './common/pipes/validation.pipe';
 
 async function bootstrap() {
   // const app = await NestFactory.create(AppModule);

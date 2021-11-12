@@ -171,24 +171,26 @@ export class Record {
   }
 
   public async start(
-    runner,
-    startCoordinates,
-    recordType,
-    goal?,
+    runner: Runner,
+    startAt: Date,
+    startCoordinates: Point,
+    recordType: RecordTypeEnum,
+    goal?: number,
   ): Promise<void> {
     this.startedAt = new Date(); // DB 저장 시각과 동일시 해야 된다. 따라서 DB 저장 이후 객체의 시각을 객체에 넣어 줘야 할 지 결정 해야 함.
     this.runner = runner;
     this.startCoordinates = startCoordinates;
+    this.startedAt = startAt;
     this.setRecordTypeAndGoal(recordType, goal);
   }
 
   private isRecordTypeFree(recordType): boolean {
-    return recordType === RecordTypeEnum.FREE;
+    return recordType === RecordTypeEnum.free;
   }
 
   private setRecordTypeAndGoal(recordType: RecordTypeEnum, goal: number): void {
     if (this.isRecordTypeFree(recordType)) {
-      this.recordType = RecordTypeEnum.FREE;
+      this.recordType = RecordTypeEnum.free;
       this.goal = 0;
     } else {
       this.recordType = recordType;

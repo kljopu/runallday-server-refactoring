@@ -19,7 +19,6 @@ export class AllExceptionFilter implements ExceptionFilter {
   catch(exception: Error, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
-    // const status = exception.getStatus();
     let status =
       exception instanceof AppError
         ? exception.getStatus()

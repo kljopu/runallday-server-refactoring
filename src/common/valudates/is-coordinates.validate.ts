@@ -3,6 +3,7 @@ import {
   ValidationOptions,
   ValidationArguments,
 } from 'class-validator';
+import { Point } from 'geojson';
 
 export function IsCoordinates(validationOptions?: ValidationOptions) {
   return function(object: Record<string, any>, propertyName: string) {
@@ -13,12 +14,8 @@ export function IsCoordinates(validationOptions?: ValidationOptions) {
       constraints: [],
       options: validationOptions,
       validator: {
-        validate(value: string, args: ValidationArguments) {
-          if (typeof value !== 'string') {
-            return false;
-          }
-
-          const coord = value.split(',');
+        validate(value: Point, args: ValidationArguments) {
+          const coord = value.coordinates;
           if (coord.length !== 2) {
             return false;
           }

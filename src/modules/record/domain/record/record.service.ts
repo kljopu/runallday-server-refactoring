@@ -40,13 +40,14 @@ export class RecordService {
    */
   public async startRecord(
     runner: Runner,
+    startAt: Date,
     startCoordinates: Point,
     runType: RecordTypeEnum,
     goal?: number,
   ): Promise<Record> {
     const record = new Record();
-    await record.start(runner, runType, startCoordinates, goal);
-    const savedRecord = await this.recordRepository.save(record);
+    await record.start(runner, startAt, startCoordinates, runType, goal);
+    const savedRecord = await this.recordRepository.startRecord(record);
     return savedRecord;
   }
 
