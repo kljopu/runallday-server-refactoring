@@ -11,11 +11,16 @@ import { RecordV1Controller } from './api/record.v1.controller';
 import { RecordApplicationService } from './application/record.application.service';
 import { RecordService } from './domain/record/record.service';
 import { RecordRepository } from './domain/record/reocrd.repository';
+import { RunRouteRepository } from './domain/run-route/run-route.repository';
+import { RunRouteService } from './domain/run-route/run-route.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([RecordRepository]), AccountModule],
+  imports: [
+    TypeOrmModule.forFeature([RecordRepository, RunRouteRepository]),
+    AccountModule,
+  ],
   controllers: [RecordV1Controller],
-  providers: [RecordApplicationService, RecordService],
+  providers: [RecordApplicationService, RecordService, RunRouteService],
   exports: [RecordApplicationService, RecordService],
 })
 export class RecordModule implements NestModule {

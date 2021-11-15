@@ -1,7 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { Point } from 'geojson';
-import { FindOneOptions } from 'typeorm';
+import { LineString, Point } from 'geojson';
+import { EntityManager, FindOneOptions } from 'typeorm';
+import {
+  ConflictError,
+  ErrorCode,
+  ForbiddenError,
+} from '../../../../utils/errors';
 import { Runner } from '../../../account/modules/runner/domain/runner.entity';
+import { RunRoute } from '../run-route/run-route.entity';
 import { RecordTypeEnum } from './record.constants';
 import { Record } from './record.entity';
 import { Records } from './records.collection';
@@ -27,6 +33,10 @@ export class RecordService {
     }
     const recordList = new Records(records);
     recordList.list;
+  }
+
+  public async findByUid(recordUid: string): Promise<Record> {
+    return await this.recordRepository.findByUid(recordUid);
   }
 
   /**
@@ -56,8 +66,27 @@ export class RecordService {
     return;
   }
 
-  // TODO
-  public async endRecord(): Promise<any> {
-    return;
+  public async endRecord(
+    entityManager: EntityManager,
+    runner: Runner,
+    record: Record,
+    route: RunRoute,
+    endCoordinates: Point,
+    endAt: Date,
+    speedPerKm: number[],
+    isSucceeded: boolean,
+  ): Promise<Record> {
+    if (!record.isOwnRecord(runner)) {
+      throw new ForbiddenError(
+        `잘못된 기록 UID 입니다.`,
+        `기록 ${record.uid}는 유저 ${runner.id}에 소유되지 않는 기록입니다.`,
+        ErrorCode['record/forbidden-record'],
+      );
+    }
+    await record.end(endCoordinates, endAt, route, speedPerKm, isSucceeded);
+    const savedRecord = await entityManager
+      .getCustomRepository(RecordRepository)
+      .save(record);
+    return savedRecord;
   }
 }

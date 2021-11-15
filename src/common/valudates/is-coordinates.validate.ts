@@ -3,7 +3,6 @@ import {
   ValidationOptions,
   ValidationArguments,
 } from 'class-validator';
-import { Point } from 'geojson';
 
 export function IsCoordinates(validationOptions?: ValidationOptions) {
   return function(object: Record<string, any>, propertyName: string) {

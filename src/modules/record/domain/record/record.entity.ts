@@ -1,5 +1,5 @@
 import * as moment from 'moment-timezone';
-import { Point } from 'geojson';
+import { LineString, Point } from 'geojson';
 import {
   Column,
   Entity,
@@ -87,10 +87,10 @@ export class Record {
   @Column({
     name: 'running_speed',
     nullable: true,
-    default: 0,
+    default: '0',
     comment: '단위(km)당 평균 속도',
   })
-  public runningSpeed: number;
+  public runningSpeed: string;
 
   @Column({
     name: 'state',
@@ -122,7 +122,8 @@ export class Record {
     array: true,
     default: [],
   })
-  public speedPerKm: number[] | (() => number);
+  public speedPerKm: number[];
+  // | (() => number);
 
   @OneToOne(type => RunRoute, {
     nullable: true,
@@ -135,6 +136,13 @@ export class Record {
   @RelationId((record: Record) => record.runRoute)
   @Column({ name: 'run_route_id', nullable: true })
   public runRouteId: number;
+
+  @Column({
+    type: 'boolean',
+    default: false,
+    name: 'is_run_succeeded',
+  })
+  public isSucceeded: boolean;
 
   /**
    * @static
@@ -184,6 +192,21 @@ export class Record {
     this.setRecordTypeAndGoal(recordType, goal);
   }
 
+  public async end(
+    endCoordinates: Point,
+    endAt: Date,
+    route: RunRoute,
+    speedPerKm: number[],
+    isSucceeded: boolean,
+  ): Promise<void> {
+    this.endCoordinates = endCoordinates;
+    this.endedAt = endAt;
+    this.runRoute = route;
+    this.speedPerKm = speedPerKm;
+    this.state = RunningState.FINISH;
+    this.isSucceeded = isSucceeded;
+  }
+
   private isRecordTypeFree(recordType): boolean {
     return recordType === RecordTypeEnum.free;
   }
@@ -231,5 +254,9 @@ export class Record {
       }
     }
     this.speedPerKm = speedPerKm;
+  }
+
+  public isOwnRecord(runner: Runner): boolean {
+    return runner.id === this.runnerId;
   }
 }
