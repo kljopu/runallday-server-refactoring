@@ -44,3 +44,5 @@ CPClient_mac
 
 # pass views
 /views
+
+/logs

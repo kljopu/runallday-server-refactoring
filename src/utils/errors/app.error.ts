@@ -20,8 +20,11 @@ export class AppError extends HttpException {
     this.code = code || ErrorCode['app/internal-error'];
     this.name = 'InternalServerError';
     this.description = description;
-    if (stack) { this.stack = stack; }
-    else { Error.captureStackTrace(this, this.constructor); }
+    if (stack) {
+      this.stack = stack;
+    } else {
+      Error.captureStackTrace(this, this.constructor);
+    }
   }
 
   public getStatus() {
