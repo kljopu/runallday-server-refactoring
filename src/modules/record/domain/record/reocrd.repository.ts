@@ -18,4 +18,13 @@ export class RecordRepository extends Repository<Record> {
     });
     return records;
   }
+
+  public async startRecord(record: Record): Promise<any> {
+    console.log(record.startCoordinates);
+    const latitude = record.startCoordinates.coordinates[1];
+    const longitude = record.startCoordinates.coordinates[0];
+    console.log(latitude, longitude);
+
+    return;
+  }
 }
