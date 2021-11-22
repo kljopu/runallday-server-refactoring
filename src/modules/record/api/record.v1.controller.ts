@@ -42,7 +42,13 @@ export class RecordV1Controller {
     @TransactionManager() entityManager: EntityManager,
     @Body() dto: RecordEndDto,
   ): Promise<any> {
-    const { recordUid, endDateTime, speedPerKm, isSucceeded } = dto;
+    const {
+      recordUid,
+      endDateTime,
+      speedPerKm,
+      isSucceeded,
+      runningDistance,
+    } = dto;
     const endCoordinatesStr = dto.endCoordinates;
     const pathArr = dto.path;
     const endCoordinates = convertCoordStringToPoint(endCoordinatesStr);
@@ -59,6 +65,7 @@ export class RecordV1Controller {
       endCoordinates,
       endAt,
       path,
+      runningDistance,
       speedPerKm,
       isSucceeded,
     );

@@ -53,6 +53,7 @@ export class RecordApplicationService {
     endCoordinates: Point,
     endAt: Date,
     path: LineString,
+    runningDistance: number,
     speedPerKm: number[],
     isSucceeded: boolean,
   ): Promise<any> {
@@ -79,6 +80,7 @@ export class RecordApplicationService {
       runner,
       record,
       updatedRoute,
+      runningDistance,
       endCoordinates,
       endAt,
       speedPerKm,

@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { LineString, Point } from 'geojson';
 import { EntityManager, FindOneOptions } from 'typeorm';
+import { calculatePacePerDistance } from '../../../../utils';
 import {
   ConflictError,
   ErrorCode,
@@ -71,9 +72,10 @@ export class RecordService {
     runner: Runner,
     record: Record,
     route: RunRoute,
+    runningDistance: number,
     endCoordinates: Point,
     endAt: Date,
-    speedPerKm: number[],
+    speedPerKm: number[], // km당 도달 시간 (초). 에시) [270, 540] -> 1km 도달시간 270초, 2km 도달 시간 540초
     isSucceeded: boolean,
   ): Promise<Record> {
     if (!record.isOwnRecord(runner)) {
@@ -83,6 +85,13 @@ export class RecordService {
         ErrorCode['record/forbidden-record'],
       );
     }
+    const passedDistanceKm = Math.trunc(runningDistance);
+    const restDistanceKm = (runningDistance % 1).toFixed(3);
+    if (speedPerKm.length !== passedDistanceKm + 1) {
+      throw new ConflictError(`임시 에러 객체`);
+    }
+    // 루프문의 마지막 실행에서는 restDistance를 이용하여 계산하여야 한다.
+    // calculatePacePerDistance()
     await record.end(endCoordinates, endAt, route, speedPerKm, isSucceeded);
     const savedRecord = await entityManager
       .getCustomRepository(RecordRepository)

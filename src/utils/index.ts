@@ -8,3 +8,4 @@ export {
 } from './phone-util';
 export { isNotNull } from './is-not-null';
 export { convertCoordStringToPoint } from './convert-coordinate-string-to-geojson-point';
+export { calculatePacePerDistance } from './calculate-pace-per-distance';

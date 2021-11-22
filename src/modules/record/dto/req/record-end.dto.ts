@@ -60,13 +60,14 @@ export class RecordEndDto {
   // 이는 이후 내부 로직을 통해 알림 형식으로 구현하자 (일정 기간 멈춤, 일정 시간 소요)
   @IsNotEmpty({ message: '잘못된 값입니다.' })
   @IsNumber({}, { message: '잘못된 값입니다.' })
-  public runningTime: number;
+  public runningTime: number; // 초단위
 
   // 스피드는 분.초의 형식으로 구성된다.
   // 이 둘을 분리해 분, 초의 형식이 맞는지 검증하는 Custom Validator가 필요하다.
-  @IsNotEmpty({ message: '잘못된 값입니다.' })
-  @IsNumber({}, { message: '잘못된 값입니다.' })
-  public runningSpeed: number;
+  // 서버에서 산출하는 것으로 결정
+  // @IsNotEmpty({ message: '잘못된 값입니다.' })
+  // @IsNumber({}, { message: '잘못된 값입니다.' })
+  // public runningSpeed: number;
 
   @IsNotEmpty({ message: '잘못된 좌표값입니다.' })
   @IsBoolean({ message: '잘못된 값입니다.' })
